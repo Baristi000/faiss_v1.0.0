@@ -45,16 +45,17 @@ class UniversalEncoder():
         all_vectors = np.array(all_vectors,dtype="f")
         return all_vectors
     
-    def build_index(self, vector, storage:bool=False):
+    def build_index(self, data, append:bool=True):
+        vector = self.encode(data)                      #converter data to vectors
         index = faiss.IndexFlatL2(self.FEATURE_SIZE)
+        if append == True:
+            index = faiss.read_index(self.storage_dir)
         index.add(vector)
-        if storage == True:
-            faiss.write_index(index,self.storage_dir)
+        faiss.write_index(index,self.storage_dir)
         return index
     
-    def search(self, query, numb_result:int=1, index=None):
-        if index == None:
-            index = faiss.read_index(self.storage_dir)
+    def search(self, query, numb_result:int=1):
+        index = faiss.read_index(self.storage_dir)
         query_vector = self.encode([query])
         top_k_result = index.search(query_vector, numb_result)
         return [
