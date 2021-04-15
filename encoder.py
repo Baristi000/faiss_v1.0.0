@@ -1,9 +1,9 @@
 import numpy as np
 import requests, faiss
+from config import setting
 
 class UniversalEncoder():
-    
-
+        
     FEATURE_SIZE = 512
     BATCH_SIZE = 32
     storage_dir = "./search_data/faiss.index"
@@ -32,20 +32,22 @@ class UniversalEncoder():
         all_vectors = np.array(all_vectors,dtype="f")
         return all_vectors
     
-    def build_index(self, data, append:bool=True):
+    def build_index(self, data:list, append:bool=True):
         vector = self.encode(data)                      #converter data to vectors
         index = faiss.IndexFlatL2(self.FEATURE_SIZE)
         if append == True:
             index = faiss.read_index(self.storage_dir)
         index.add(vector)
         faiss.write_index(index,self.storage_dir)
+        setting.index_on_ram = index
         return index
     
     def search(self, data, query, numb_result:int=1):
-        index = faiss.read_index(self.storage_dir)
+        if setting.index_on_ram == None:
+            setting.index_on_ram = faiss.read_index(self.storage_dir)
+        index = setting.index_on_ram
         query_vector = self.encode([query])
         top_k_result = index.search(query_vector, numb_result)
         return [
             data[_id] for _id in top_k_result[1].tolist()[0]
         ]
-    
