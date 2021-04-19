@@ -1,6 +1,7 @@
 import numpy as np
 import requests, faiss
 from config import setting
+import numpy as np
 
 class UniversalEncoder():
         
@@ -51,3 +52,17 @@ class UniversalEncoder():
         return [
             data[_id] for _id in top_k_result[1].tolist()[0]
         ]
+    def remove_index(self, query):
+        #get current indexs
+        if setting.index_on_ram == None:
+            setting.index_on_ram = faiss.read_index(self.storage_dir)
+        index = setting.index_on_ram
+        #search index
+        query_vector = self.encode([query])
+        id = index.search(query_vector,1)[1][0][0]
+        #remove data from index
+        index.remove_ids(np.array([id]))
+        #update data
+        faiss.write_index(index,self.storage_dir)
+        setting.index_on_ram = index
+        return index

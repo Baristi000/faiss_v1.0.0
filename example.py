@@ -1,5 +1,7 @@
 from encoder import UniversalEncoder
+import numpy as np
 
+#fake data
 data = [
     'What color is chameleon?',
     'When is the festival of colors?',
@@ -10,16 +12,21 @@ data = [
     'What we do in the shadows?',
     'What is the meaning of all this?',
     'What is the meaning of Russel\'s paradox?',
-    'How are you doing?'
+    'How are you doing?', 'artical', 'student', 'bank', 'accounts'
 ]
 
-data1 = ['accounts', 'artical', 'student', 'bank']
+# example about create connection function
+#encoder = UniversalEncoder("tstsv.ddns.net", 8501)
+encoder = UniversalEncoder("localhost", 8501)
 
-data2 = ["table"]
+#example about rebuild index function
+encoder.build_index(data,False)
 
-encoder = UniversalEncoder("tstsv.ddns.net", 8501)
+#example about remove a closest semantic index
+#   Note: you need to search first to make sure the data to delete is correct
+#   otherwise, the closest semantic index is deleted and cannot be restored
+encoder.remove_index("accounts")
 
-#encoder.build_index(data2,True)
-
-r = encoder.search(data,"sun",2)
+#example about search function
+r = encoder.search(data,"accounts")
 [print(i) for i in r]
