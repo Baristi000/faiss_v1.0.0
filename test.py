@@ -16,8 +16,8 @@ data = [
 ]
 
 # example about create connection function
-#encoder = UniversalEncoder("tstsv.ddns.net", 8501)
-encoder = UniversalEncoder("localhost", 8501)
+encoder = UniversalEncoder("tstsv.ddns.net", 8501)
+#encoder = UniversalEncoder("localhost", 8501)
 
 #example about rebuild index function
 encoder.build_index(data,False)
@@ -25,8 +25,8 @@ encoder.build_index(data,False)
 #example about remove a closest semantic index
 #   Note: you need to search first to make sure the data to delete is correct
 #   otherwise, the closest semantic index is deleted and cannot be restored
-encoder.remove_index("accounts")
+#encoder.remove_index("accounts")
 
 #example about search function
-r = encoder.search(data,"accounts")
+r = encoder.search(data,"sun",2)
 [print(i) for i in r]

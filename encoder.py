@@ -1,5 +1,5 @@
 import numpy as np
-import requests, faiss
+import requests, faiss, os
 from config import setting
 import numpy as np
 
@@ -7,7 +7,7 @@ class UniversalEncoder():
         
     FEATURE_SIZE = 512
     BATCH_SIZE = 32
-    storage_dir = "./search_data/faiss.index"
+    storage_dir = str(os.path.realpath("."))+"/search_data/faiss.index"
 
     def __init__(self, host, port):
         self.server_url = "http://{host}:{port}/v1/models/model:predict".format(
