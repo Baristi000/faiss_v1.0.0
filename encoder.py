@@ -78,6 +78,10 @@ class UniversalEncoder():
             setting.data_on_ram.pop(id)
             #update data
             faiss.write_index(setting.index_on_ram,self.vectors_dir)
+            file = open(self.data_dir,"w")
+            file.write("")
+            json.dump({"data":setting.data_on_ram},file)
+            file.close()
         except Exception:
             return False
         return True
